@@ -14,15 +14,15 @@ class MyApp extends StatelessWidget {
           elevation: 0.1,
           title: Text(title),
           backgroundColor: Colors.redAccent,
-          leading: Padding(
+          /*leading: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Image(
               image: AssetImage('images/logo-rgembonghappy.png'),
             ),
-          ),
+          ),*/
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.list),
+              icon: Icon(Icons.notifications),
               onPressed: () {},
             )
           ],
@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
             );
           }),
         ),
+        drawer: makeDrawer,
         bottomNavigationBar: makeBottom,
       ),
     );
@@ -45,10 +46,11 @@ class MyApp extends StatelessWidget {
 }
 
 class Meal {
-  const Meal({this.title, this.desc, this.image});
+  const Meal({this.title, this.desc, this.bahan, this.image});
 
   final String title;
   final String desc;
+  final String bahan;
   final String image;
 }
 
@@ -57,40 +59,63 @@ const List<Meal> meals = const <Meal>[
       title: 'Coklat Keju',
       desc:
           'Nikmatnya coklat bercampur gurihnya keju dan susu, membuatmu ingin lagi dan lagi',
+      bahan:
+          'Tepung dengan protein tinggi, gula pasir, telur ayam negeri, susu sapi segar dan margarin terbaik',
       image: 'coklat_keju.jpg'),
   const Meal(
       title: 'Coklat',
       desc:
           'Manisnya coklat dalam balutan roti yang lembut akan membuatmu jadi lebih semangat',
+      bahan:
+          'Tepung dengan protein tinggi, gula pasir, telur ayam negeri, susu sapi segar dan margarin terbaik',
       image: 'coklat.jpg'),
   const Meal(
       title: 'Tiramisu',
       desc: 'Rasa ini akan selalu mambuatmu rindu gaess...',
+      bahan:
+          'Tepung dengan protein tinggi, gula pasir, telur ayam negeri, susu sapi segar dan margarin terbaik',
       image: 'tira.jpg'),
   const Meal(
       title: 'Cappucino',
       desc: 'Cara baru ngopi dalam bentuk roti',
+      bahan:
+          'Tepung dengan protein tinggi, gula pasir, telur ayam negeri, susu sapi segar dan margarin terbaik',
       image: 'cappucino.jpg'),
   const Meal(
       title: 'Green Tea',
       desc: 'Akan membuat hari-harimu menjadi seger',
+      bahan:
+          'Tepung dengan protein tinggi, gula pasir, telur ayam negeri, susu sapi segar dan margarin terbaik',
       image: 'grinti.jpg'),
   const Meal(
       title: 'Srikaya',
       desc: 'Rasa yang dulu pernah ada kini hadir kembali',
+      bahan:
+          'Tepung dengan protein tinggi, gula pasir, telur ayam negeri, susu sapi segar dan margarin terbaik',
       image: 'srikaya.jpg'),
   const Meal(
       title: 'Keju Susu',
       desc: 'Parutan Keju yang gurih dan bikin nagih',
+      bahan:
+          'Tepung dengan protein tinggi, gula pasir, telur ayam negeri, susu sapi segar dan margarin terbaik',
       image: 'keju.jpg'),
   const Meal(
       title: 'Original',
       desc: 'Roti Asli Samarinda yang penuh cinta dan bikin bahagia',
+      bahan:
+          'Tepung dengan protein tinggi, gula pasir, telur ayam negeri, susu sapi segar dan margarin terbaik',
       image: 'original.jpg'),
-  const Meal(title: 'GemPi', desc: '', image: 'gempi2.jpg'),
+  const Meal(
+      title: 'GemPi',
+      desc: 'Roti Gembong serasa Pizza yang ngilangin laparmu..',
+      bahan:
+          'Tepung dengan protein tinggi, gula pasir, telur ayam negeri, susu sapi segar dan margarin terbaik',
+      image: 'gempi2.jpg'),
   const Meal(
       title: 'Mentega Gula',
       desc: 'Rasa nostalgia saat nenek masih remaja',
+      bahan:
+          'Tepung dengan protein tinggi, gula pasir, telur ayam negeri, susu sapi segar dan margarin terbaik',
       image: 'mentgul.jpg'),
   const Meal(title: 'Durian', desc: '', image: 'logo-rgembonghappy.png'),
 ];
@@ -135,21 +160,20 @@ class _ListMakananState extends State<ListMakanan> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            FlatButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DetailMakanan(
-                              meal: widget.meal,
-                            ))).then((Object result) {
-                  print('result from DetailMakanan ${result.toString()}');
-                });
-                print(widget.meal.title + ' got pressed!');
-              },
-              child: Image(
-                image: AssetImage('images/' + widget.meal.image),
-                width: 100.0,
+            Expanded(
+              child: FlatButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DetailMakanan(
+                                meal: widget.meal,
+                              ))).then((Object result) {
+                    print('result from DetailMakanan ${result.toString()}');
+                  });
+                  print(widget.meal.title + ' got pressed!');
+                },
+                child: Image(image: AssetImage('images/' + widget.meal.image)),
               ),
             ),
             Padding(
@@ -189,25 +213,39 @@ class DetailMakanan extends StatelessWidget {
                 '.: ' + meal.title + ' :.',
                 style: TextStyle(fontSize: 30.0, fontFamily: 'Pacifico'),
               ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
+              Expanded(
                 child: Image(
                   image: AssetImage('images/' + meal.image),
                 ),
               ),
-              Text(
-                meal.desc,
-                style: TextStyle(fontFamily: 'Source Sans Pro', fontSize: 20.0),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              RaisedButton(
-                child: Text('Kembali ke Daftar Meal'),
-                color: Colors.red[200],
-                onPressed: () => Navigator.pop(context),
-              )
+              Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      meal.desc,
+                      style: TextStyle(
+                          fontFamily: 'Source Sans Pro',
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                    Divider(),
+                    Text(
+                      'Terbuat dari: ' + meal.bahan,
+                      style: TextStyle(
+                          fontFamily: 'Source Sans Pro', fontSize: 20.0),
+                      textAlign: TextAlign.justify,
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    RaisedButton(
+                      child: Text('Kembali ke Daftar Meal'),
+                      color: Colors.red[200],
+                      onPressed: () => Navigator.pop(context),
+                    )
+                  ])
             ],
           ),
         ),
@@ -241,5 +279,20 @@ final makeBottom = Container(
         )
       ],
     ),
+  ),
+);
+
+final makeDrawer = Drawer(
+  elevation: 20.0,
+  child: ListView(
+    padding: EdgeInsets.zero,
+    children: <Widget>[
+      UserAccountsDrawerHeader(
+        accountName: Text('Indra Wahyudi'),
+        accountEmail: Text('neodayax@gmail.com'),
+        currentAccountPicture: Image.asset('images/logo-rgembonghappy.png'),
+        decoration: BoxDecoration(color: Colors.red[300]),
+      ),
+    ],
   ),
 );
